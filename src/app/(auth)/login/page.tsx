@@ -1,37 +1,37 @@
-import InputCustom from "@/app/component/InputCustom";
 import { Metadata } from "next";
-import Link from "next/link";
+import FormLogin from "./FormLogin";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
-export const metadata : Metadata = {
-  title : "Login"
-}
+export const metadata: Metadata = {
+  title: "Login",
+};
 
-export default function Login() {
-    return <div className="grid grid-cols-2 h-[100vh]">
+
+export default async function Login() {
+
+  const cookieStore = await cookies()
+  const user = cookieStore.get("user")
+  const accessToken = cookieStore.get("Access-Token")
+
+  if(user && accessToken){
+    redirect("/")
+  }
+
+
+  return (
+    <div className="grid grid-cols-2 h-[100vh]">
       {/* Login other auth */}
       <div>
         <div className="h-full w-full bg-slate-400"></div>
       </div>
       {/* Login Credential */}
       <div className="bg-slate-200 flex justify-center items-center h-full w-full">
-        <div className="backdrop-blur-md shadow-lg rounded-md w-[400px] h-[300px] p-4 py-8 text-center flex flex-col gap-y-2 ">
+        <div className="backdrop-blur-md shadow-lg rounded-md w-[400px] h-[300px] p-4 text-center flex flex-col gap-y-2 ">
           <h2>Login</h2>
-          <InputCustom
-                      startContent
-                      placeholder="your@gmail.com"
-                      label="Email"
-                      eyeVisible={false}
-                    />
-                    <InputCustom
-                      label="Password"
-                      placeholder="Enter your password"
-                      startContent
-                      eyeVisible={true}
-                    />
-          <div className="mt-10">
-              <Link className="mt-10 bg-slate-400 rounded-md shadow-sm p-2" href="/">Submit</Link>
-          </div>
+          <FormLogin />
         </div>
       </div>
     </div>
+  );
 }
